@@ -4,7 +4,9 @@ const port = 3000
 
 app.get('/', (req, res) => {
     console.log("HELLO")
-  res.send('Hello World!')
+    return res.send('Hello World!')
 })
 
 app.listen(port)
+
+export default app;
