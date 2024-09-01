@@ -1,10 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import HomePage from './Components/MarketPage/Homepage.jsx'
+import HomePage from './Pages/Homepage';
+
 
 function App() {
   return (
-   <HomePage/>
+    <HomePage />
   );
 }
 
