@@ -5,12 +5,14 @@ const mongoose = require("mongoose");
 
 
 
-const routes = require("./routes/marketRoutes")
+const marketRoutes = require("./routes/marketRoutes")
+const wareHouseRoutes = require("./routes/wareHouseRoutes")
 const app = express();
 
 app.use(express.json());
 
-app.use("/",routes);
+app.use("/market",marketRoutes);
+app.use("/warehouse",wareHouseRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
