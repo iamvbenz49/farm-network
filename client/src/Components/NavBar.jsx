@@ -1,5 +1,5 @@
 import React from "react";
-import { FiBell } from 'react-icons/fi';  // Changed to notification icon
+import { FiBell } from 'react-icons/fi'; 
 import { FaUserCircle } from 'react-icons/fa';
 
 function Navbar() {
@@ -32,7 +32,7 @@ function Navbar() {
       {/* Main Content (Takes up the remaining space) */}
       <div className="ml-[250px] flex-1">
         {/* Navbar */}
-        <nav className="bg-white shadow-md p-4 fixed z-10 w-[calc(100%-250px)]">
+        <nav className="bg-white shadow-md p-4 fixed z-10 w-[calc(100%-250px)] mb-2">
           <div className="container mx-auto flex justify-between items-center">
             {/* Left - Logo */}
             <div className="flex items-center">
@@ -52,15 +52,14 @@ function Navbar() {
 
             {/* Right - Notification Icon and Profile */}
             <div className="flex items-center space-x-6">
-              <FiBell className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700" /> {/* Changed to notification */}
+              <FiBell className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700" />
               <FaUserCircle className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700" />
             </div>
           </div>
         </nav>
 
         {/* Content Section */}
-        <div className="p-8 mt-16"> {/* Added top margin to adjust for fixed navbar */}
-          <h1 className="text-3xl">Welcome to FarmNetwork</h1>
+        <div className="p-8 mt-10">
         </div>
       </div>
     </div>
