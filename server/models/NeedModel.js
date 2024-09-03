@@ -30,6 +30,9 @@ const NeedSchema = new Schema({
     needtype: {
         type: String,
         required: true
+    },
+    status: {
+        
     }
 });
 
