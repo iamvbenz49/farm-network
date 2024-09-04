@@ -1,86 +1,97 @@
 import React from "react";
 
 function LoginPage() {
-  // Inline CSS for the animations
-  const fadeSlideLeft = {
+  // New animation styles
+  const zoomInRotate = {
     opacity: 0,
-    transform: 'translateX(-50px) scale(0.8) rotate(-10deg)',
-    animation: 'fadeInSlideLeft 1s ease-out forwards',
+    transform: 'scale(0.5) rotate(-45deg)',
+    animation: 'zoomInRotate 1.5s ease-out forwards',
   };
 
-  const bounceEffect = {
+  const floatIn = {
     opacity: 0,
-    transform: 'translateY(-20px) rotate(10deg)',
-    animation: 'bounceIn 1s ease-out forwards',
+    transform: 'translateY(50px)',
+    animation: 'floatIn 2s ease-out forwards 0.5s',
   };
 
-  // Keyframes for the animations
+  // Keyframes for new animations
   const keyframes = `
-    @keyframes fadeInSlideLeft {
-      to {
-        opacity: 1;
-        transform: translateX(0) scale(1) rotate(0deg);
-      }
-    }
-
-    @keyframes bounceIn {
+    @keyframes zoomInRotate {
       0% {
         opacity: 0;
-        transform: translateY(-20px) rotate(10deg);
+        transform: scale(0.5) rotate(-45deg);
       }
       50% {
-        opacity: 1;
-        transform: translateY(10px) rotate(-5deg);
+        opacity: 0.5;
+        transform: scale(0.75) rotate(-20deg);
       }
       100% {
         opacity: 1;
-        transform: translateY(0) rotate(0deg);
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes floatIn {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   `;
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex bg-gray-100">
+      <style>{keyframes}</style>
+
       {/* Left side with animation */}
-      <div className="w-1/2 flex items-center justify-start bg-[rgba(40,48,71,255)] text-white">
-        <div className="flex flex-col items-start ml-24">
-          <style>{keyframes}</style>
-          <h1 style={fadeSlideLeft} className="text-6xl font-bold font-sans mb-4">Farm</h1>
-          <h1 style={bounceEffect} className="text-6xl font-bold font-sans">NetWork</h1>
+      <div className="w-1/2 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+        <div className="flex flex-col items-center text-center">
+          <h1 style={zoomInRotate} className="text-7xl font-bold font-sans mb-6">
+            Farm Network
+          </h1>
+          <p style={floatIn} className="text-xl font-light max-w-md">
+            Your gateway to smart and efficient farming solutions.
+          </p>
         </div>
       </div>
 
       {/* Right side with Login Form */}
-      <div className="w-1/2 flex items-center justify-center bg-white">
-        <div className="w-full max-w-md">
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-6 font-sans">
+      <div className="w-1/2 flex items-center justify-center bg-white p-12 shadow-lg">
+        <div className="w-full max-w-lg">
+          <h2 className="text-4xl font-extrabold text-gray-800 mb-8 font-sans text-center">
             Welcome Back
           </h2>
-          <p className="mb-4 text-sm text-gray-500 font-sans">Please login to your account</p>
+          <p className="mb-6 text-sm text-gray-500 font-sans text-center">
+            Sign in to continue to your account
+          </p>
           <form>
-            <div className="mb-4">
+            <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Email
               </label>
               <input
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="email"
                 placeholder="Enter your email"
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-8">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Password
               </label>
               <input
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="password"
                 placeholder="Enter your password"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 font-sans"
+              className="w-full bg-purple-600 text-white font-bold py-4 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
             >
               Login
             </button>
@@ -92,5 +103,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
-

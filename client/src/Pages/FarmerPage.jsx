@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Components/NavBar";
-import Choose from "./Choose";
-import CropManagement from "./CropManagement";
+import Choose from "../Components/Choose";
+import CropManagement from "../Components/CropManagement";
 function FarmerPage(){
     return (
     <>

@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Components/NavBar";
-import Choose from "./Choose";
-import LandAvailabilityChart from "./LandAvailabilityChart"; // Import the chart component
+import Choose from "../Components/Choose";
+import LandAvailabilityChart from "../Components/LandAvailabilityChart"; // Import the chart component
 
 const villageNames = [
   "Agar", "Chirgaon", "Gurgaon", "Jind", "Kanina",

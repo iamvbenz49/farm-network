@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../Components/NavBar";
-import Choose from "./Choose";
+import Choose from "../Components/Choose";
 function HomePage(){
     return (
     <>
