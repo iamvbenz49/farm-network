@@ -7,8 +7,8 @@ import LoginPage from './Pages/LoginPage';
 function App() {
   return (
     <>
-     {/* <FarmerPage/> */}
-     <LoginPage/>
+     <FarmerPage/>
+     {/* <LoginPage/> */}
     </>
   );
 }
