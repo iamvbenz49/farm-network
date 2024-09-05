@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { FiBell } from 'react-icons/fi'; 
 import { FaUserCircle } from 'react-icons/fa';
+import { AiOutlineInfoCircle } from 'react-icons/ai'; // Add this for notification icons
 
-function Navbar() {
+function Navbar(props) {
   const [notifications, setNotifications] = useState([
-    { id: 1, text: "New bid came from Dhamodhar" },
-    { id: 2, text: "Market price update for wheat" },
-    { id: 3, text: "Bid accepted for corn from Rajesh" },
+    { id: 1, text: "New bid came from Dhamodhar", icon: <AiOutlineInfoCircle className="text-blue-500" /> },
+    { id: 2, text: "Market price update for wheat", icon: <AiOutlineInfoCircle className="text-green-500" /> },
+    { id: 3, text: "Bid accepted for corn from Rajesh", icon: <AiOutlineInfoCircle className="text-red-500" /> },
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -28,7 +29,7 @@ function Navbar() {
               Home
             </li>
             <li className="text-lg cursor-pointer hover:bg-[#1e2532] p-2 rounded">
-              Marketneed
+              Market Need
             </li>
             <li className="text-lg cursor-pointer hover:bg-[#1e2532] p-2 rounded">
               BarCharts
@@ -65,28 +66,31 @@ function Navbar() {
             <div className="relative flex items-center space-x-6">
               <div className="relative">
                 <FiBell
-                  className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700"
+                  className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700 transition-colors"
                   onClick={handleNotificationClick}
                 />
                 {notifications.length > 0 && (
                   <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-red-500 rounded-full" />
                 )}
                 {showDropdown && (
-                  <div className="absolute top-12 right-0 w-64 bg-white shadow-lg rounded-lg z-30">
+                  <div className="absolute top-12 right-0 w-64 bg-white shadow-lg rounded-lg z-30 transition-transform transform scale-100 opacity-100">
                     <ul className="divide-y divide-gray-200">
                       {notifications.map((notification) => (
                         <li
                           key={notification.id}
-                          className="p-4 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                          className="p-4 flex items-center space-x-3 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
                         >
-                          {notification.text}
+                          <div className="text-xl">
+                            {notification.icon}
+                          </div>
+                          <div>{notification.text}</div>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
               </div>
-              <FaUserCircle className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700" />
+              <FaUserCircle className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700 transition-colors" />
             </div>
           </div>
         </nav>

@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/farmer" element={<FarmerPage />} />
+        <Route path="/need" element={<HomePage />} />
         <Route path="/warehouse" element={<WarHousePage />} />
         {/* Add more routes as needed */}
       </Routes>

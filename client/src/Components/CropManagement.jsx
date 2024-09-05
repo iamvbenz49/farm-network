@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const CropManagement = () => {
+const CropManagement = (props) => {
   const [activeTab, setActiveTab] = useState("current");
   const [selectedCrop, setSelectedCrop] = useState(null);
   const [selectedStage, setSelectedStage] = useState(null);

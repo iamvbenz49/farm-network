@@ -5,13 +5,13 @@ const Need = require("../models/NeedModel");
 
 router.get("/", async (req,res) => {
     const {farmerId} = req.query;
-    console.log(farmerId)
     try {
         const farmerData = await Farmer.findByIdAndUpdate(
-            farmerId,
+            "64f8e743aa7f454d2e17c8ea",
             { new: true } 
         );
-        return res.status(200).json({farmerData})
+        const NeedData = await Need.find({});
+        return res.status(200).json({farmer:farmerData, need:NeedData})
     } catch(e) {
         console.log("Database error : Farmer Route")
         console.log(e)

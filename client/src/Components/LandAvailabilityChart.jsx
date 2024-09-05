@@ -17,7 +17,9 @@ const generateGrid = (data, columns = 50, rows = 10) => {
   const availabilityMap = data.reduce((acc, curr) => {
     acc[new Date(curr.date).toDateString()] = {
       isActive: curr.availableLand > 0,
-      location: curr.location || 'Unknown Location'
+      location: curr.location || 'Unknown Location',
+      owner: curr.owner || 'Unknown Owner',
+      crop: curr.crop || 'Unknown Crop'
     };
     return acc;
   }, {});
@@ -36,7 +38,7 @@ const generateGrid = (data, columns = 50, rows = 10) => {
   return grid.map(row =>
     row.map(day => ({
       date: day,
-      ...availabilityMap[day] || { isActive: false, location: 'No Data' }
+      ...availabilityMap[day] || { isActive: false, location: 'No Data', owner: 'No Data', crop: 'No Data' }
     }))
   );
 };
@@ -46,36 +48,59 @@ const LandAvailabilityChart = ({ data }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333', fontSize: '28px' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333', fontSize: '24px' }}>
         Land Availability Chart
       </h1>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${grid[0].length}, 20px)`,
-        gridTemplateRows: `repeat(${grid.length}, 20px)`,
-        gap: '2px',
+        gridTemplateColumns: `repeat(${grid[0].length}, 30px)`, // Smaller cell size
+        gridTemplateRows: `repeat(${grid.length}, 30px)`, // Smaller cell size
+        gap: '1px', // Smaller gap between cells
         padding: '10px',
         overflow: 'auto',
         border: '2px solid #ddd',
         borderRadius: '5px',
         backgroundColor: '#f9f9f9'
       }}>
-        {grid.flat().map(({ date, isActive, location }, index) => (
+        {grid.flat().map(({ isActive, location, owner, crop }, index) => (
           <div
             key={index}
             style={{
-              width: '20px',
-              height: '20px',
+              width: '30px',
+              height: '30px',
               backgroundColor: isActive ? 'green' : 'lightgray',
               border: '1px solid gray',
-              textAlign: 'center',
-              lineHeight: '20px',
-              color: 'black',
-              borderRadius: '3px',
+              borderRadius: '3px', // Smaller border radius
               position: 'relative',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'transparent' // Hide any text or content inside cells
             }}
-            title={location || 'No Location'}
-          />
+            title={`Location: ${location}\nOwner: ${owner}\nCrop: ${crop}`} // Tooltip text
+          >
+            {/* Tooltip content styled directly within cell */}
+            <div style={{
+              position: 'absolute',
+              bottom: '100%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'white',
+              color: 'black',
+              padding: '3px', // Smaller padding
+              border: '1px solid gray',
+              borderRadius: '3px',
+              whiteSpace: 'nowrap',
+              visibility: 'hidden',
+              opacity: 0,
+              transition: 'opacity 0.2s'
+            }}>
+              Location: {location}<br />
+              Owner: {owner}<br />
+              Crop: {crop}
+            </div>
+          </div>
         ))}
       </div>
     </div>

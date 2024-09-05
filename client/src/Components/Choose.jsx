@@ -2,32 +2,28 @@ import React, { useState } from "react";
 import BarChart from "./BarChart";
 import Table from "./Table";
 
-function Choose() {
+// Function to generate random data for crops
+function generateData(cropNames, min, max) {
+  return cropNames.map((crop) => ({
+    name: crop,
+    value: Math.floor(Math.random() * (max - min + 1)) + min
+  }));
+}
+
+function Choose(props) {
   const [selectedData, setSelectedData] = useState("processed"); // Default to "processed"
+
+  // List of 10 crop names
+  const cropNames = [
+    "Wheat", "Rice", "Corn", "Barley", "Soybean", 
+    "Sorghum", "Oats", "Millet", "Rye", "Quinoa"
+  ];
 
   // Define data and styling based on the selected type
   const dataMap = {
-    processed: [
-      { name: "Jan", value: 20 },
-      { name: "Feb", value: 40 },
-      { name: "Mar", value: 60 },
-      { name: "Apr", value: 80 },
-      { name: "May", value: 100 }
-    ],
-    unprocessed: [
-      { name: "Jan", value: 15 },
-      { name: "Feb", value: 30 },
-      { name: "Mar", value: 45 },
-      { name: "Apr", value: 60 },
-      { name: "May", value: 75 }
-    ],
-    upcoming: [
-      { name: "Jan", value: 10 },
-      { name: "Feb", value: 25 },
-      { name: "Mar", value: 50 },
-      { name: "Apr", value: 70 },
-      { name: "May", value: 90 }
-    ]
+    processed: generateData(cropNames, 400, 900),    // Values between 400 and 900
+    unprocessed: generateData(cropNames, 200, 600),  // Values between 200 and 600
+    upcoming: generateData(cropNames, 100, 500)      // Values between 100 and 500
   };
 
   const backgroundColorMap = {
@@ -45,26 +41,26 @@ function Choose() {
   const shadowClass = selectedData === "processed" ? "shadow-xl" : "shadow-lg";
 
   return (
-    <div className="relative px-4 mt-4"> {/* Reduced mt-4 */}
+    <div className="relative px-4 mt-4">
       {/* Navbar-like Buttons for choosing data */}
       <div className="flex bg-gray-100 rounded-md shadow-md mb-6">
         <button
           onClick={() => setSelectedData("processed")}
           className={`flex-1 px-3 py-2 rounded-l-md ${selectedData === "processed" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
         >
-          Processed
+           {props.page !== "warehouse"?<span>Processing</span>:<span>Filled</span>}
         </button>
-        <button
+        {props.page !== "warehouse" && <button
           onClick={() => setSelectedData("unprocessed")}
           className={`flex-1 px-3 py-2 ${selectedData === "unprocessed" ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"}`}
         >
           Unprocessed
-        </button>
+        </button>}
         <button
           onClick={() => setSelectedData("upcoming")}
           className={`flex-1 px-3 py-2 rounded-r-md ${selectedData === "upcoming" ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700"}`}
         >
-          Upcoming
+          {props.page !== "warehouse"?<span>History</span>:<span>Unfilled</span>}
         </button>
       </div>
 
@@ -74,10 +70,9 @@ function Choose() {
       </div>
 
       {/* Adding the Table Component below the BarChart */}
-      <Table />
+      <Table page = {props.page} type = {selectedData}/>
     </div>
   );
 }
 
 export default Choose;
-

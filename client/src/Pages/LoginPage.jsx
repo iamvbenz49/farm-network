@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Error from "./Error";
 
 function LoginPage() {
   // New animation styles
@@ -48,27 +47,32 @@ function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(""); // To track invalid login attempts
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted"); // Add this line
     try {
       const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
       const data = res.data;
-      if(res.status === 400) {
-        <Error />
+
+      if (data.message === "Invalid Login") {
+        setLoginError("Invalid email or password. Please try again."); // Set the error message
+        return;
       }
-      localStorage.setItem('username', data.accessToken);
+
+      setLoginError(""); // Clear any previous errors if login is successful
+
       if (data.usertype === "farmer") {
         navigate("/farmer");
       } else if (data.usertype === "warehouse") {
-        // Add navigation for warehouse
+        navigate("/warehouse")
       } else {
-        // Handle other user types or error
+        navigate("/error")
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      setLoginError("An unexpected error occurred. Please try again later.");
     }
   };
 
@@ -129,6 +133,13 @@ function LoginPage() {
               Login
             </button>
           </form>
+
+          {/* Conditionally render the error message */}
+          {loginError && (
+            <p className="mt-4 text-red-500 text-center font-sans">
+              {loginError}
+            </p>
+          )}
         </div>
       </div>
     </div>

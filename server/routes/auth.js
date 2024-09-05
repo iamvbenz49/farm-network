@@ -11,9 +11,10 @@ const authorize = async (req, res, next) => {
     const user = await UserModel.findOne({"username":username});
     // console.log( await UserModel.find({"username":username}))
     if(!user || user.password !== password) {
-        return res.status(400).json({message:"Invalid Login"})
+        return res.status(200).json({message:"Invalid Login"})
     }
     req.body.password = user.accesstoken;
+    req.body.type = user.usertype;
     next()
 }
 
@@ -30,7 +31,7 @@ router.post('/', authorize, (req, res) => {
     
     // const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
     // refreshTokens.push(refreshToken) 
-    res.json({ accessToken: accessToken, usertype:"farmer" })
+    res.json({ accessToken: accessToken, usertype:req.body.type })
 })
 
 async function authenticateToken(req, res, next) {
