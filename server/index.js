@@ -2,7 +2,7 @@ require("dotenv").config()
 
 const express = require("express");
 const mongoose = require("mongoose");
-
+const cors = require("cors")
 
 
 const marketRoutes = require("./routes/marketRoutes")
@@ -11,6 +11,7 @@ const farmerRoutes = require("./routes/farmerRoutes")
 const loginRoutes = require("./routes/auth")
 const app = express();
 
+app.use(cors())
 app.use(express.json());
 const bodyParser = require('body-parser');
 

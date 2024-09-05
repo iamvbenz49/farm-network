@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Error from "./Error";
 
 function LoginPage() {
   // New animation styles
@@ -43,6 +46,32 @@ function LoginPage() {
     }
   `;
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted"); // Add this line
+    try {
+      const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
+      const data = res.data;
+      if(res.status === 400) {
+        <Error />
+      }
+      localStorage.setItem('username', data.accessToken);
+      if (data.usertype === "farmer") {
+        navigate("/farmer");
+      } else if (data.usertype === "warehouse") {
+        // Add navigation for warehouse
+      } else {
+        // Handle other user types or error
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+
   return (
     <div className="h-screen flex bg-gray-100">
       <style>{keyframes}</style>
@@ -68,7 +97,7 @@ function LoginPage() {
           <p className="mb-6 text-sm text-gray-500 font-sans text-center">
             Sign in to continue to your account
           </p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Email
@@ -77,6 +106,8 @@ function LoginPage() {
                 className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-8">
@@ -87,6 +118,8 @@ function LoginPage() {
                 className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="password"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <button
