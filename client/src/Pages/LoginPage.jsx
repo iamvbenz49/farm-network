@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage() {
   // New animation styles
@@ -43,6 +45,37 @@ function LoginPage() {
     }
   `;
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(""); // To track invalid login attempts
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
+      const data = res.data;
+
+      if (data.message === "Invalid Login") {
+        setLoginError("Invalid email or password. Please try again."); // Set the error message
+        return;
+      }
+
+      setLoginError(""); // Clear any previous errors if login is successful
+
+      if (data.usertype === "farmer") {
+        navigate("/farmer");
+      } else if (data.usertype === "warehouse") {
+        navigate("/warehouse")
+      } else {
+        navigate("/error")
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      setLoginError("An unexpected error occurred. Please try again later.");
+    }
+  };
+
   return (
     <div className="h-screen flex bg-gray-100">
       <style>{keyframes}</style>
@@ -68,7 +101,7 @@ function LoginPage() {
           <p className="mb-6 text-sm text-gray-500 font-sans text-center">
             Sign in to continue to your account
           </p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Email
@@ -77,6 +110,8 @@ function LoginPage() {
                 className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-8">
@@ -87,6 +122,8 @@ function LoginPage() {
                 className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
                 type="password"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <button
@@ -96,6 +133,13 @@ function LoginPage() {
               Login
             </button>
           </form>
+
+          {/* Conditionally render the error message */}
+          {loginError && (
+            <p className="mt-4 text-red-500 text-center font-sans">
+              {loginError}
+            </p>
+          )}
         </div>
       </div>
     </div>
