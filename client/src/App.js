@@ -8,6 +8,7 @@ import LoginPage from './Pages/LoginPage';
 
 function App() {
   return (
+<<<<<<< HEAD
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
@@ -17,6 +18,12 @@ function App() {
         {/* Add more routes as needed */}
       </Routes>
     </BrowserRouter>
+=======
+    <>
+     <FarmerPage/>
+     {/* <LoginPage/> */}
+    </>
+>>>>>>> 66a81528cf883f25da286cba55e9d62fff7ea67e
   );
 }
 

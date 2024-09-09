@@ -4,14 +4,27 @@ import { FaUserCircle } from 'react-icons/fa';
 
 function Navbar() {
   const [notifications, setNotifications] = useState([
-    { id: 1, text: "New bid came from Dhamodhar" },
-    { id: 2, text: "Market price update for wheat" },
-    { id: 3, text: "Bid accepted for corn from Rajesh" },
+    { id: 1, text: "New bid came from Dhamodhar", type: "info" },
+    { id: 2, text: "Market price update for wheat", type: "update" },
+    { id: 3, text: "Bid accepted for corn from Rajesh", type: "success" },
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleNotificationClick = () => {
     setShowDropdown(!showDropdown);
+  };
+
+  const getNotificationClass = (type) => {
+    switch (type) {
+      case "info":
+        return "text-blue-700 bg-blue-100 border-blue-200"; // Blue for informational messages
+      case "update":
+        return "text-yellow-700 bg-yellow-100 border-yellow-200"; // Yellow for updates
+      case "success":
+        return "text-green-700 bg-green-100 border-green-200"; // Green for success messages
+      default:
+        return "text-gray-700 bg-gray-100 border-gray-200"; // Default gray color
+    }
   };
 
   return (
@@ -64,24 +77,37 @@ function Navbar() {
             {/* Right - Notification Icon and Profile */}
             <div className="relative flex items-center space-x-6">
               <div className="relative">
-                <FiBell
-                  className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700"
+                <button
+                  className="relative"
                   onClick={handleNotificationClick}
-                />
-                {notifications.length > 0 && (
-                  <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-red-500 rounded-full" />
-                )}
+                >
+                  <FiBell
+                    className="text-2xl text-blue-500 cursor-pointer hover:text-blue-700"
+                  />
+                  {notifications.length > 0 && (
+                    <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white" />
+                  )}
+                </button>
                 {showDropdown && (
-                  <div className="absolute top-12 right-0 w-64 bg-white shadow-lg rounded-lg z-30">
-                    <ul className="divide-y divide-gray-200">
-                      {notifications.map((notification) => (
-                        <li
-                          key={notification.id}
-                          className="p-4 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                        >
-                          {notification.text}
-                        </li>
-                      ))}
+                  <div className="absolute top-12 right-0 w-80 bg-white border border-gray-300 shadow-xl rounded-lg z-30 transition-transform transform scale-100 origin-top-right">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-bold p-3 rounded-t-lg shadow-md">
+                      Notifications
+                    </div>
+                    <ul className="divide-y divide-gray-300">
+                      {notifications.length > 0 ? (
+                        notifications.map((notification) => (
+                          <li
+                            key={notification.id}
+                            className={`p-4 text-sm ${getNotificationClass(notification.type)} border-l-4 border-${notification.type}-500 rounded-lg hover:bg-${notification.type}-50 transition-colors duration-150`}
+                          >
+                            {notification.text}
+                          </li>
+                        ))
+                      ) : (
+                        <div className="p-4 text-center text-gray-500">
+                          No notifications
+                        </div>
+                      )}
                     </ul>
                   </div>
                 )}
