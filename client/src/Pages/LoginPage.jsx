@@ -52,28 +52,28 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
-      const data = res.data;
+    // try {
+    //   const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
+    //   const data = res.data;
 
-      if (data.message === "Invalid Login") {
-        setLoginError("Invalid email or password. Please try again."); // Set the error message
-        return;
-      }
+    //   if (data.message === "Invalid Login") {
+    //     setLoginError("Invalid email or password. Please try again."); // Set the error message
+    //     return;
+    //   }
 
-      setLoginError(""); // Clear any previous errors if login is successful
+    //   setLoginError(""); // Clear any previous errors if login is successful
 
-      if (data.usertype === "farmer") {
-        navigate("/farmer");
-      } else if (data.usertype === "warehouse") {
-        navigate("/warehouse")
-      } else {
-        navigate("/error")
-      }
-    } catch (error) {
-      console.error("Error logging in:", error);
-      setLoginError("An unexpected error occurred. Please try again later.");
-    }
+    //   if (data.usertype === "farmer") {
+    //     navigate("/farmer");
+    //   } else if (data.usertype === "warehouse") {
+    //     navigate("/warehouse")
+    //   } else {
+    //     navigate("/error")
+    //   }
+    // } catch (error) {
+    //   console.error("Error logging in:", error);
+    //   setLoginError("An unexpected error occurred. Please try again later.");
+    // }
   };
 
   return (
