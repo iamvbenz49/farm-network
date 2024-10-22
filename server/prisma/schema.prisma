@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Crop {
+  id          Int     @id @default(autoincrement())
+  name        String
+  amount      Int
+  farmerId    Int?
+  jobId       Int?
+  landId      Int?
+  demandId    Int
+  subType     String?
+  description String?
+  Demand      Demand  @relation(fields: [demandId], references: [id])
+  Farmer      Farmer? @relation(fields: [farmerId], references: [id])
+  Job         Job?    @relation(fields: [jobId], references: [id])
+  Land        Land?   @relation(fields: [landId], references: [id])
+}
+
+model Demand {
+  id       Int       @id @default(autoincrement())
+  deadline DateTime?
+  mrp      Float?
+  msp      Float?
+  Crop     Crop[]
+  Job      Job[]
+  Vehicle  Vehicle[]
+}
+
+model Farmer {
+  id           Int    @id @default(autoincrement())
+  name         String
+  credit_score Float?
+  area         Float?
+  Crop         Crop[]
+  Job          Job[]
+  Land         Land[]
+}
+
+model Job {
+  id        Int       @id @default(autoincrement())
+  startDate DateTime?
+  endDate   DateTime?
+  farmerId  Int
+  demandId  Int
+  Crop      Crop[]
+  Demand    Demand    @relation(fields: [demandId], references: [id])
+  Farmer    Farmer    @relation(fields: [farmerId], references: [id])
+}
+
+model Land {
+  id       Int    @id @default(autoincrement())
+  farmerId Int
+  Crop     Crop[]
+  Farmer   Farmer @relation(fields: [farmerId], references: [id])
+}
+
+model Vehicle {
+  id          Int      @id @default(autoincrement())
+  numberPlate String
+  ownerName   String
+  score       Int?
+  Demand      Demand[]
+}
