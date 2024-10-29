@@ -4,9 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
 require("dotenv").config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server started and now listening", process.env.PORT);
 });
