@@ -8,19 +8,20 @@ datasource db {
 }
 
 model Crop {
-  id          Int     @id @default(autoincrement())
-  name        String
-  amount      Int
-  farmerId    Int?
-  jobId       Int?
-  landId      Int?
-  demandId    Int
-  subType     String?
-  description String?
-  Demand      Demand  @relation(fields: [demandId], references: [id])
-  Farmer      Farmer? @relation(fields: [farmerId], references: [id])
-  Job         Job?    @relation(fields: [jobId], references: [id])
-  Land        Land?   @relation(fields: [landId], references: [id])
+  id               Int     @id @default(autoincrement())
+  name             String
+  amount           Int
+  farmerId         Int?
+  jobId            Int?
+  landId           Int?
+  demandId         Int
+  subType          String?
+  description      String?
+  assignmentStatus Boolean
+  Demand           Demand  @relation(fields: [demandId], references: [id])
+  Farmer           Farmer? @relation(fields: [farmerId], references: [id])
+  Job              Job?    @relation(fields: [jobId], references: [id])
+  Land             Land?   @relation(fields: [landId], references: [id])
 }
 
 model Demand {
@@ -30,7 +31,7 @@ model Demand {
   msp      Float?
   Crop     Crop[]
   Job      Job[]
-  Vehicle  Vehicle[]
+  Vehicle  Vehicle[] @relation("DemandToVehicle")
 }
 
 model Farmer {
@@ -66,5 +67,5 @@ model Vehicle {
   numberPlate String
   ownerName   String
   score       Int?
-  Demand      Demand[]
+  Demand      Demand[] @relation("DemandToVehicle")
 }
