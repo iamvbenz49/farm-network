@@ -1,3 +1,4 @@
+// seedData.ts
 export const seedData = {
   demands: [
     { deadline: new Date('2025-03-10T00:00:00Z'), mrp: 200.0, msp: 175.0 },

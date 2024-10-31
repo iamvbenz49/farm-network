@@ -6,7 +6,7 @@ export async function getLands() {
   try {
     const landData = await prisma.land.findMany({
       where: {
-        filled: false    
+        filled: true    
       },
       include: {
         Crop: true,      
@@ -21,4 +21,8 @@ export async function getLands() {
   }
   return []
 }
+
+getLands()
+  .then(data => console.log(JSON.stringify(data, null, 2))) // Pretty print the data
+  .catch(err => console.error(err));
 

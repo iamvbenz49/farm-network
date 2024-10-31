@@ -70,20 +70,18 @@ export const distributeLoad = async () => {
     try {
         const tasks = await getTasks();
         
-        // Fetch lands with their suitable crops
         const lands = await prisma.land.findMany({
             include: {
-                SuitableCrop: true, // Retrieves crops that are suitable for each land
+                SuitableCrop: true, 
             },
         });
 
         for (const task of tasks) {
             const heap = new MinHeap();
 
-            // Populate heap with only suitable crop-land pairs
             for (const crop of task.Crop) {
                 for (const land of lands) {
-                    // Check if land is suitable, not filled, and has sufficient area
+                    
                     const isSuitableCrop = land.SuitableCrop.some(suitable => suitable.id === crop.id);
                     
                     if (!land.filled && land.area >= crop.landSpacing && isSuitableCrop) {
@@ -92,46 +90,47 @@ export const distributeLoad = async () => {
                     }
                 }
             }
-
-            // Distribute crops based on heuristic values
+            var newArea = 0, allocated = 0;
             while (!heap.isEmpty()) {
                 const { heuristic, crop, land } = heap.extractMin();
 
-                // Calculate max amount allocatable to this land
                 const maxAllocatable = Math.min(crop.amount, Math.floor(land.area / crop.landSpacing));
 
                 if (maxAllocatable > 0) {
-                    // Calculate new area after allocation
-                    const newArea = land.area - maxAllocatable * crop.landSpacing;
+                    
+                    newArea += maxAllocatable * crop.landSpacing;
 
-                    // Update the land in the database
+                    
                     await prisma.land.update({
                         where: { id: land.id },
                         data: { 
-                            area: newArea,
-                            filled: newArea <= 0,
+                            assignedArea: newArea,
+                            filled: newArea >= land.area,
+                            Crop: {
+                                connect: [
+                                  { id: crop.id }
+                                ]
+                            }
                         },
                     });
-
-                    // Update the crop in the database
+                      
+                      
                     await prisma.crop.update({
                         where: { id: crop.id },
                         data: { 
-                            amount: crop.amount - maxAllocatable,
-                            assignmentStatus: crop.amount - maxAllocatable <= 0
+                            assignedAmount: maxAllocatable,
+                            assignmentStatus: crop.assignedAmount + maxAllocatable <= crop.amount,
+                            landId: land.id,
+                            demandId: task.id
                         },
                     });
 
-                    // Update in-memory values
-                    land.area = newArea;
-                    crop.amount -= maxAllocatable;
+                    land.assignedArea = newArea;
 
-                    // Mark land as filled if its area is fully utilized
                     if (newArea <= 0) {
                         land.filled = true;
                     }
 
-                    // Break the loop if the crop has been fully assigned
                     if (crop.amount <= 0) {
                         break;
                     }
@@ -145,6 +144,3 @@ export const distributeLoad = async () => {
     }
 };
 
-distributeLoad()
-.then(data => console.log(data))
-.catch(err => console.log(err))

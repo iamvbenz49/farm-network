@@ -10,7 +10,8 @@ datasource db {
 model Crop {
   id              Int     @id @default(autoincrement())
   name            String
-  amount          Int
+  amount          Int   
+  assignedAmount  Int     @default(0)
   landSpacing     Int
   farmerId        Int?
   jobId           Int?
@@ -42,6 +43,7 @@ model Demand {
 model Farmer {
   id           Int    @id @default(autoincrement())
   name         String
+  password        String  @default("hello world")   
   credit_score Float?
   area         Float?
   Crop         Crop[]
@@ -64,6 +66,7 @@ model Land {
   id       Int    @id @default(autoincrement())
   farmerId Int
   area     Float
+  assignedArea Float?
   filled   Boolean  @default(false)
   Crop     Crop[] @relation("planted")
   SuitableCrop Crop[] @relation("suitable")
