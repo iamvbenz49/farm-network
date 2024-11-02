@@ -8,7 +8,7 @@ function FarmerPage(){
     <div>
       <Navbar />
       <div className="ml-[250px]">
-        <CropManagement></CropManagement>
+        <CropManagement />
       </div>
     </div>
     </>

@@ -33,11 +33,15 @@ model Crop {
 model Demand {
   id       Int       @id @default(autoincrement())
   deadline DateTime?
+  isCompleted Boolean  @default(false)
+  marketID Int?
   mrp      Float?
   msp      Float?
   Crop     Crop[]
   Job      Job[]
   Vehicle  Vehicle[]
+
+  MarketMan MarketMan? @relation(fields: [marketID], references:[id])
 }
 
 model Farmer {
@@ -51,6 +55,11 @@ model Farmer {
   Land         Land[]
 }
 
+
+model MarketMan {
+  id        Int   @id @default(autoincrement())
+  Demand    Demand[]
+}
 model Job {
   id        Int       @id @default(autoincrement())
   startDate DateTime?

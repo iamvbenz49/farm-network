@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'; // Import eye icons
 
 function LoginPage() {
-  // New animation styles
   const zoomInRotate = {
     opacity: 0,
     transform: 'scale(0.5) rotate(-45deg)',
@@ -16,7 +17,6 @@ function LoginPage() {
     animation: 'floatIn 2s ease-out forwards 0.5s',
   };
 
-  // Keyframes for new animations
   const keyframes = `
     @keyframes zoomInRotate {
       0% {
@@ -47,33 +47,44 @@ function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState(""); // To track invalid login attempts
+  const [userType, setUserType] = useState("Farmer");
+  const [loginError, setLoginError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   const res = await axios.post("http://localhost:5000/login", { username: email, password: password });
-    //   const data = res.data;
+    try {
+      if(email === ""||password === "") {
+        setLoginError("Enter Relevant details")
+        return;
+      }
+      const res = await axios.post("http://localhost:5000/login", { gmail: email, password: password, userType: userType });
+      const data = res.data;
+      
 
-    //   if (data.message === "Invalid Login") {
-    //     setLoginError("Invalid email or password. Please try again."); // Set the error message
-    //     return;
-    //   }
+      Cookies.set('userType', 'Farmer'); 
+      Cookies.set('accessToken', data.accessToken); 
 
-    //   setLoginError(""); // Clear any previous errors if login is successful
+      console.log("data", data)
+      if (data.message === "Invalid Login") {
+        setLoginError("Invalid email or password. Please try again."); 
+        return;
+      }
 
-    //   if (data.usertype === "farmer") {
-    //     navigate("/farmer");
-    //   } else if (data.usertype === "warehouse") {
-    //     navigate("/warehouse")
-    //   } else {
-    //     navigate("/error")
-    //   }
-    // } catch (error) {
-    //   console.error("Error logging in:", error);
-    //   setLoginError("An unexpected error occurred. Please try again later.");
-    // }
+      setLoginError(""); 
+
+      if (data.userType === "Farmer") {
+        navigate("/farmer");
+      } else if (data.userType === "warehouse") {
+        navigate("/warehouse");
+      } else {
+        navigate("/error");
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      setLoginError("An unexpected error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -104,6 +115,20 @@ function LoginPage() {
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
+                User Type
+              </label>
+              <select
+                className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+              >
+                <option value="Farmer">Farmer</option>
+                <option value="Market">Market</option>
+                <option value="Transport">Transport</option>
+              </select>
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Email
               </label>
               <input
@@ -114,17 +139,24 @@ function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-8">
+            <div className="mb-8 relative"> {/* Set relative positioning */}
               <label className="block text-gray-700 text-sm font-bold mb-2 font-sans">
                 Password
               </label>
               <input
                 className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 font-sans text-lg"
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle between text and password
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button" // Prevent form submission
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                className="absolute inset-y-0 right-0 top-8 flex items-center pr-3 text-gray-500"
+              >
+                {showPassword ? <AiOutlineEyeInvisible size={24} /> : <AiOutlineEye size={24} />}
+              </button>
             </div>
             <button
               type="submit"

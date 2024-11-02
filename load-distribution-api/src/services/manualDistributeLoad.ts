@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const manualDistributeLoad = async (farmer_id: number, crop_id: number) => {
-
     await prisma.farmer.update({
         where: {id: crop_id},
         data: {
